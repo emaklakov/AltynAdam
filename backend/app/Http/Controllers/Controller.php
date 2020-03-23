@@ -9,5 +9,24 @@ use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+	use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+	/**
+	 * return error response.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function sendError($error, $errorMessages = [], $code = 404)
+	{
+		$response = [
+			'message' => $error,
+		];
+
+
+		if (!empty($errorMessages)) {
+			$response['errors'] = $errorMessages;
+		}
+
+		return response($response, $code);
+	}
 }
