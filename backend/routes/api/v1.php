@@ -14,8 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::group(['prefix' => 'auth'], function () {
+	Route::post('login','AuthController@login');
+	Route::post('signup','AuthController@signup');
+
+	Route::group(['middleware' => 'auth:sanctum'], function () {
+		Route::get('logout','AuthController@logout');
+		Route::get('user','AuthController@user');
+	});
+});
+
 Route::middleware('auth:sanctum')->group(function() {
-	Route::get('/test', function(Request $request) {
-		return 'Test';
+	Route::get('/user', function(Request $request) {
+		return $request->user();
 	});
 });
