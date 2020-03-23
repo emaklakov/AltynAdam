@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes
+| API Routes V2
 |--------------------------------------------------------------------------
 |
 | Here is where you can register API routes for your application. These
@@ -13,9 +13,3 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware('auth:sanctum')->group(function() {
-	Route::get('/test', function(Request $request) {
-		return 'Test';
-	});
-});
