@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class User extends Authenticatable
 {
@@ -39,6 +40,7 @@ class User extends Authenticatable
 		'phone_verified_at' => 'datetime',
 		'created_at' => 'datetime',
 		'updated_at' => 'datetime',
+		'is_blocked' => 'boolean',
 	];
 
 	/**
@@ -59,6 +61,17 @@ class User extends Authenticatable
 		$user->is_blocked = false;
 		$user->save();
 		$user->roles()->attach($userRole);
+
+		return $user;
+	}
+
+	public static function blockUser(array $data, $user_id)
+	{
+		$user = User::findOrFail($user_id);
+		$user->is_blocked = $data['is_blocked'];
+		$user->save();
+
+		$user->tokens()->delete();
 
 		return $user;
 	}

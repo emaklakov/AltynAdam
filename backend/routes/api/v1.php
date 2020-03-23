@@ -25,7 +25,15 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::middleware('auth:sanctum')->group(function() {
-	Route::get('/test', function(Request $request) {
-		return "Test";
+	Route::group(['middleware' => 'role:administrator'], function() {
+		Route::get('/users/{user_id}', 'UserController@show'); // Информация о пользователе
+
+		Route::put('/users/{user_id}/block', 'UserController@block'); // Блокировка/разблокировка пользователя
+		Route::put('/users/{user_id}/roles', 'UserController@roles');
+		Route::put('/users/{user_id}/permissions', 'UserController@permissions');
+	});
+
+	Route::group(['middleware' => 'role:manager', 'permission:manage-ovoschi'], function() {
+
 	});
 });

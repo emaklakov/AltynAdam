@@ -12,9 +12,22 @@ class PermissionSeeder extends Seeder
 	 */
 	public function run()
 	{
-		$manageUser = new Permission();
-		$manageUser->name = 'Управление пользователями';
-		$manageUser->slug = 'manage-users';
-		$manageUser->save();
+		$manageUser = Permission::where(['slug' => 'manage-users'])->first();
+
+		if(!$manageUser) {
+			$manageUser = new Permission();
+			$manageUser->name = 'Управление пользователями';
+			$manageUser->slug = 'manage-users';
+			$manageUser->save();
+		}
+
+		$manageOvoschi = Permission::where(['slug' => 'manage-ovoschi'])->first();
+
+		if(!$manageOvoschi) {
+			$manageOvoschi = new Permission();
+			$manageOvoschi->name = 'Управление Овощным';
+			$manageOvoschi->slug = 'manage-ovoschi';
+			$manageOvoschi->save();
+		}
 	}
 }
