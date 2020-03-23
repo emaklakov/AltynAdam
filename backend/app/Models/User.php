@@ -37,6 +37,8 @@ class User extends Authenticatable
 	 */
 	protected $casts = [
 		'phone_verified_at' => 'datetime',
+		'created_at' => 'datetime',
+		'updated_at' => 'datetime',
 	];
 
 	/**
@@ -48,13 +50,30 @@ class User extends Authenticatable
 	 */
 	public static function createUser(array $data)
 	{
+		$userRole = Role::where('slug', 'user')->first();
+
 		$user = new User();
 		$user->name = $data['name'];
 		$user->phone = $data['phone'];
 		$user->password = Hash::make($data['password']);
 		$user->is_blocked = false;
 		$user->save();
+		$user->roles()->attach($userRole);
 
 		return $user;
+	}
+
+	public function getInfo()
+	{
+		return [
+			'id' => $this->id,
+			'name' => $this->name,
+			'phone' => $this->phone,
+			'is_blocked' => $this->is_blocked,
+			'roles' => $this->roles,
+			'permissions' => $this->permissions,
+			'created_at' => $this->created_at,
+			'updated_at' => $this->updated_at,
+		];
 	}
 }

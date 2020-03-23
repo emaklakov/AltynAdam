@@ -28,7 +28,7 @@ class LoginAuth extends FormRequest
 		$rules = [
 			'phone' => ['required', 'string', 'min:12', 'max:12', 'phone_number'],
 			'password' => ['required', 'integer', 'min:1000', 'max:9999'],
-			'device_name' => ['required', 'string', 'max:255']
+			'device_name' => ['required', 'string', 'max:255'],
 		];
 
 		Validator::extend('phone_number', function($attribute, $value, $parameters) {

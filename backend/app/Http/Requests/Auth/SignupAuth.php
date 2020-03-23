@@ -28,7 +28,8 @@ class SignupAuth extends FormRequest
 		$rules = [
 			'name' => ['required', 'string', 'max:255'],
 			'phone' => ['required', 'string', 'min:12', 'max:12', 'phone_number', 'unique:users'],
-			'password' => ['required', 'integer', 'min:1000', 'max:9999']
+			'password' => ['required', 'integer', 'min:1000', 'max:9999'],
+			'device_name' => ['required', 'string', 'max:255'],
 		];
 
 		Validator::extend('phone_number', function($attribute, $value, $parameters) {

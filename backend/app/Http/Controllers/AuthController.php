@@ -13,10 +13,11 @@ class AuthController extends Controller
 	{
 		$user = User::createUser($request->validated());
 
+		$token = $user->createToken($request->device_name)->plainTextToken;
+
 		$response = [
-			'id' => $user['id'],
-			'name' => $user['name'],
-			'phone' => $user['phone'],
+			'token' => $token,
+			'user' => $user->getInfo(),
 		];
 
 		return response($response, 201);
@@ -24,26 +25,21 @@ class AuthController extends Controller
 
 	public function login(Request $request)
 	{
-		$user = User::where('phone', $request->phone)->firstOrFail();
+		$user = User::where('phone', $request->phone)->first();
+
+		if(!$user || !Hash::check($request->password, $user->password)) {
+			return $this->sendError('The provided credentials are incorrect', null, 401);
+		}
 
 		if($user->is_blocked) {
 			return $this->sendError('User blocked', null, 401);
-		}
-
-		if(!Hash::check($request->password, $user->password)) {
-			return $this->sendError('The provided credentials are incorrect', null, 401);
 		}
 
 		$token = $user->createToken($request->device_name)->plainTextToken;
 
 		$response = [
 			'token' => $token,
-			'user' => [
-				'id' => $user['id'],
-				'name' => $user['name'],
-				'phone' => $user['phone'],
-				'is_blocked' => $user['is_blocked'],
-			],
+			'user' => $user->getInfo(),
 		];
 
 		return response($response, 200);
@@ -66,6 +62,12 @@ class AuthController extends Controller
 
 	public function user(Request $request)
 	{
-		return $request->user();
+		$user = $request->user();
+
+		$response = [
+			'user' => $user->getInfo(),
+		];
+
+		return response($response, 200);
 	}
 }
