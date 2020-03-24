@@ -39,7 +39,7 @@ trait HasRolesAndPermissions
 	 * @param $permission
 	 * @return bool
 	 */
-	protected function hasPermission($permission)
+	public function hasPermission($permission)
 	{
 		return (bool) $this->permissions->where('slug', $permission->slug)->count();
 	}
@@ -48,7 +48,7 @@ trait HasRolesAndPermissions
 	 * @param $permission
 	 * @return bool
 	 */
-	protected function hasPermissionTo($permission)
+	public function hasPermissionTo($permission)
 	{
 		return $this->hasPermissionThroughRole($permission) || $this->hasPermission($permission);
 	}

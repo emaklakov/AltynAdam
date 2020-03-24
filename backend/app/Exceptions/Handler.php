@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -113,6 +114,12 @@ class Handler extends ExceptionHandler
 										'message' => $exception->getMessage(),
 										'errors' => $exception->errors(),
 									], 400);
+		}
+
+		if ($exception instanceof QueryException) {
+			return response()->json([
+										'message' => $exception->getMessage(),
+									], 500);
 		}
 
 		if ($exception instanceof Exception) {

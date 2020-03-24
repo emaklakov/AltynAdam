@@ -25,7 +25,7 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::middleware('auth:sanctum')->group(function() {
-	Route::group(['middleware' => 'role:administrator'], function() {
+	Route::group(['middleware' => 'role:administrator,manage-users'], function() {
 		Route::get('/users/{user_id}', 'UserController@show'); // Информация о пользователе
 
 		Route::put('/users/{user_id}/block', 'UserController@block'); // Блокировка/разблокировка пользователя
@@ -33,7 +33,18 @@ Route::middleware('auth:sanctum')->group(function() {
 		Route::put('/users/{user_id}/permissions', 'UserController@permissions');
 	});
 
-	Route::group(['middleware' => 'role:manager', 'permission:manage-ovoschi'], function() {
+	Route::group(['middleware' => 'role:administrator,manage-roles'], function() {
+		Route::group(['prefix' => 'dictionaries'], function () {
+			/* Работа с ролями */
+			Route::get('/roles','Dictionaries\RoleController@index');
+			Route::post('/roles','Dictionaries\RoleController@store');
+			Route::get('/roles/{role_id}','Dictionaries\RoleController@show');
+			Route::put('/roles/{role_id}','Dictionaries\RoleController@update');
+			Route::delete('/roles/{role_id}','Dictionaries\RoleController@destroy');
+		});
+	});
+
+	Route::group(['middleware' => 'role:manager,manage-ovoschi'], function() {
 
 	});
 });

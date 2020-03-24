@@ -12,6 +12,15 @@ class PermissionSeeder extends Seeder
 	 */
 	public function run()
 	{
+		$manageUser = Permission::where(['slug' => 'manage-roles'])->first();
+
+		if(!$manageUser) {
+			$manageUser = new Permission();
+			$manageUser->name = 'Управление ролями';
+			$manageUser->slug = 'manage-roles';
+			$manageUser->save();
+		}
+
 		$manageUser = Permission::where(['slug' => 'manage-users'])->first();
 
 		if(!$manageUser) {

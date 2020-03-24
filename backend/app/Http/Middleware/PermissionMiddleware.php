@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class RoleMiddleware
+class PermissionMiddleware
 {
 	/**
 	 * Handle an incoming request.
@@ -16,15 +16,9 @@ class RoleMiddleware
 	 *
 	 * @return mixed
 	 */
-	public function handle($request, Closure $next, $role, $permission = null)
+	public function handle($request, Closure $next, $permission)
 	{
-		if(!auth()->user()->hasRole($role)) {
-			return response()->json([
-										'message' => 'Forbidden Error'
-									], 403);
-		}
-
-		if( !empty($permission) && !auth()->user()->can($permission)) {
+		if(!auth()->user()->can($permission)) {
 			return response()->json([
 										'message' => 'Forbidden Error'
 									], 403);
