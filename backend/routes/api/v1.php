@@ -44,6 +44,17 @@ Route::middleware('auth:sanctum')->group(function() {
 		});
 	});
 
+	Route::group(['middleware' => 'role:administrator,manage-roles'], function() {
+		Route::group(['prefix' => 'dictionaries'], function () {
+			/* Работа с правами */
+			Route::get('/permissions','Dictionaries\PermissionController@index');
+			Route::post('/permissions','Dictionaries\PermissionController@store');
+			Route::get('/permissions/{permission_id}','Dictionaries\PermissionController@show');
+			Route::put('/permissions/{permission_id}','Dictionaries\PermissionController@update');
+			Route::delete('/permissions/{permission_id}','Dictionaries\PermissionController@destroy');
+		});
+	});
+
 	Route::group(['middleware' => 'role:manager,manage-ovoschi'], function() {
 
 	});
