@@ -4,7 +4,7 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BlockUser extends FormRequest
+class RoleUser extends FormRequest
 {
 	/**
 	 * Determine if the user is authorized to make this request.
@@ -24,7 +24,8 @@ class BlockUser extends FormRequest
 	public function rules()
 	{
 		$rules = [
-			'is_blocked' => ['required', 'boolean'],
+			'roles' => ['array', 'min:1'],
+			'roles.*' => ['integer', 'min:1'],
 		];
 
 		return $rules;

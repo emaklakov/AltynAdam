@@ -65,9 +65,41 @@ class User extends Authenticatable
 		return $user;
 	}
 
-	public static function blockUser(array $data, $user_id)
+	public static function updateUser(array $data, $user)
 	{
-		$user = User::findOrFail($user_id);
+		$is_update = false;
+		$is_logout = false;
+
+		if (isset($data['name']) && !empty($data['name'])) {
+			$user->name = $data['name'];
+			$is_update = true;
+		}
+
+		if (isset($data['phone']) && !empty($data['phone'])) {
+			$user->name = $data['phone'];
+			$is_update = true;
+			$is_logout = true;
+		}
+
+		if (isset($data['password']) && !empty($data['password'])) {
+			$user->name = $data['password'];
+			$is_update = true;
+			$is_logout = true;
+		}
+
+		if($is_update) {
+			$user->save();
+
+			if($is_logout) {
+				$user->tokens()->delete();
+			}
+		}
+
+		return $user;
+	}
+
+	public static function blockUser(array $data, $user)
+	{
 		$user->is_blocked = $data['is_blocked'];
 		$user->save();
 
